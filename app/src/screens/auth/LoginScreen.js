@@ -2,14 +2,9 @@ import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import Toast from 'react-native-toast-message';
 import { useNavigation } from '@react-navigation/native';
-
-const loginSchema = Yup.object().shape({
-  email: Yup.string().email('Invalid email').required('Email is required'),
-  password: Yup.string().min(6, 'Too short').required('Password is required'),
-});
+import { loginSchema } from '../../utils/validation/loginSchema';
 
 const authService = {
   login: async ({ email, password }) => {
@@ -27,7 +22,7 @@ const authService = {
   },
 };
 
-export default function Login({ setUser }) {
+export default function LoginScreen({ setUser }) {
   const navigation = useNavigation();
 
   const formik = useFormik({
@@ -41,14 +36,20 @@ export default function Login({ setUser }) {
         await AsyncStorage.setItem('session', JSON.stringify(userData));
         setUser(userData);
 
-        Toast.show({ type: 'success', text1: 'Login successful!' });
+        Toast.show({
+          type: 'success',
+          text1: 'Login successful!',
+        });
 
-        if (userData.role === 'admin') navigation.navigate('AdminScreen');
-        else navigation.navigate('UserScreen');
+        if (userData.role === 'admin') {
+          navigation.navigate('AdminScreen');
+        } else {
+          navigation.navigate('UserScreen');
+        }
       } catch (err) {
         const errorMsg = err.response?.data?.message || 'Login failed';
-        Toast.show({ type: 'error', text1: errorMsg });
         setErrors({ email: errorMsg });
+        Toast.show({ type: 'error', text1: errorMsg });
       } finally {
         setSubmitting(false);
       }
@@ -56,16 +57,15 @@ export default function Login({ setUser }) {
   });
 
   return (
-    <View className="flex-1 bg-gray-100 px-6 justify-center">
+    <View className="flex-1 justify-center px-6 bg-gray-100">
       <Text className="text-3xl font-bold text-center mb-8">Login</Text>
 
       <View className="mb-4">
         <Text className="mb-1 text-gray-700 font-semibold">Email</Text>
         <TextInput
-          placeholder="Email"
+          placeholder="Enter your email"
           keyboardType="email-address"
           autoCapitalize="none"
-          autoComplete="email"
           className="bg-white p-3 rounded border border-gray-300"
           onChangeText={formik.handleChange('email')}
           onBlur={formik.handleBlur('email')}
@@ -79,7 +79,7 @@ export default function Login({ setUser }) {
       <View className="mb-6">
         <Text className="mb-1 text-gray-700 font-semibold">Password</Text>
         <TextInput
-          placeholder="Password"
+          placeholder="Enter your password"
           secureTextEntry
           className="bg-white p-3 rounded border border-gray-300"
           onChangeText={formik.handleChange('password')}
@@ -92,16 +92,9 @@ export default function Login({ setUser }) {
       </View>
 
       <TouchableOpacity
-        onPress={() => navigation.navigate('ForgotPassword')}
-        className="mb-6"
-      >
-        <Text className="text-cyan-600 text-right font-medium">Forgot password?</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
         onPress={formik.handleSubmit}
         disabled={formik.isSubmitting}
-        className={`bg-cyan-600 py-3 rounded ${formik.isSubmitting ? 'opacity-60' : 'hover:bg-cyan-700'}`}
+        className={`bg-cyan-600 py-3 rounded ${formik.isSubmitting ? 'opacity-60' : ''}`}
       >
         {formik.isSubmitting ? (
           <ActivityIndicator color="#fff" />
