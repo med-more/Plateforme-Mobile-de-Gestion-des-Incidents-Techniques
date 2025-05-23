@@ -1,0 +1,35 @@
+# 👉 Node modules (dépendances, à ne jamais versionner)
+node_modules/
+
+# 👉 Variables d’environnement (NE JAMAIS versionner vos secrets !)
+.env
+
+# 👉 Fichiers logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 👉 Dossiers de build (si buildé pour déploiement)
+dist/
+build/
+
+# 👉 OS-specific files
+.DS_Store
+Thumbs.db
+
+# 👉 IDE settings (facultatif, selon équipe)
+.vscode/
+.idea/
+
+# 👉 Lock file (optionnel selon gestionnaire de paquets)
+package-lock.json
+yarn.lock
+
+
+
+chaima = "mohamed";
+
+
+djfnjndjgjdn
