@@ -6,7 +6,7 @@ import Toast from 'react-native-toast-message';
 import { useNavigation } from '@react-navigation/native';
 import emailjs from '@emailjs/browser';
 import axios from 'axios';
-import { registerSchema } from '../../utils/validation/registerSchema';
+import { registerSchema } from '../../utils/validation';
 
 const RegisterScreen = () => {
   const navigation = useNavigation();

@@ -3,9 +3,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AuthContext = createContext();
 
-
-
 export const useAuth = () => useContext(AuthContext);
+
+export const getToken = async () => {
+  const session = await AsyncStorage.getItem('session');
+  return session ? JSON.parse(session).token : null;
+};
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -13,9 +16,13 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const checkSession = async () => {
-      const session = await AsyncStorage.getItem('session');
-      if (session) {
-        setUser(JSON.parse(session));
+      try {
+        const session = await AsyncStorage.getItem('session');
+        if (session) {
+          setUser(JSON.parse(session));
+        }
+      } catch (error) {
+        console.error('Erreur de chargement de session:', error);
       }
       setLoading(false);
     };
