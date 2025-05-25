@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import { useNavigation } from '@react-navigation/native';
-import { loginSchema } from '../../utils/validation/loginSchema';
+import { loginSchema } from '../../utils/validation';
 
 const LoginScreen = () => {
   const navigation = useNavigation();
