@@ -4,13 +4,24 @@ import { getToken } from '../context/AuthContext';
 const API_URL = 'http://localhost:5000/api';  
 
 export const loginUser = async (email, password) => {
-  const response = await axios.post(`${API_URL}/auth/login`, { email, password });
-  return response.data; 
+  try {
+    const response = await axios.post(`${API_URL}/auth/login`, {
+      email,
+      password
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
-export const registerUser = async (formData) => {
-  const response = await axios.post(`${API_URL}/auth/register`, formData);
-  return response.data;
+export const registerUser = async (userData) => {
+  try {
+    const response = await axios.post(`${API_URL}/auth/register`, userData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const getUserProfile = async () => {
@@ -25,14 +36,33 @@ export const getUserProfile = async () => {
   return response.data;
 };
 
-export const updateUserProfile = async (formData) => {
-  const token = await getToken();
+export const updateUserProfile = async (userId, userData, token) => {
+  try {
+    const response = await axios.put(`${API_URL}/auth/${userId}`, userData, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
-  const response = await axios.put(`${API_URL}/user/profile`, formData, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const verifyEmail = async (token) => {
+  try {
+    const response = await axios.get(`${API_URL}/auth/verify-email/${token}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
-  return response.data;
+export const verifyPhone = async (phone, code) => {
+  try {
+    const response = await axios.post(`${API_URL}/auth/verify-phone`, { phone, code });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
